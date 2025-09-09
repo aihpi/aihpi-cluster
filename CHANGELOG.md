@@ -6,45 +6,37 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
  
 ## [Unreleased] - yyyy-mm-dd
  
-Here we write upgrading notes for brands. It's a team effort to make them as
-straightforward as possible.
- 
 ### Added
-- [PROJECTNAME-XXXX](http://tickets.projectname.com/browse/PROJECTNAME-XXXX)
-  MINOR Ticket title goes here.
-- [PROJECTNAME-YYYY](http://tickets.projectname.com/browse/PROJECTNAME-YYYY)
-  PATCH Ticket title goes here.
- 
+- Nothing yet.
+
 ### Changed
- 
+- Nothing yet.
+
 ### Fixed
- 
-## [1.2.4] - 2017-03-15
+- Nothing yet.
+
+## [0.1.0] - 2025-09-09
   
-Here we would have the update steps for 1.2.4 for people to follow.
- 
+Initial release of aihpi package for SLURM job submission.
+
 ### Added
- 
+- Core job submission functionality with SlurmJobExecutor
+- Support for single-node and multi-node distributed training
+- Container support with Pyxis/Enroot integration
+- SSH remote job submission capabilities
+- Real-time job monitoring and log streaming with JobMonitor
+- Experiment tracking integrations:
+  - Weights & Biases (wandb) support
+  - MLflow integration  
+  - Local file-based tracking
+- Comprehensive configuration system with JobConfig and ContainerConfig
+- Built-in LlamaFactory training support
+- Complete examples and documentation
+- Organized package structure with core, monitoring, tracking, and examples modules
+
 ### Changed
-  
-- [PROJECTNAME-ZZZZ](http://tickets.projectname.com/browse/PROJECTNAME-ZZZZ)
-  PATCH Drupal.org is now used for composer.
- 
+- Updated README with comprehensive aihpi documentation
+- Modified template structure to accommodate Python package
+
 ### Fixed
- 
-- [PROJECTNAME-TTTT](http://tickets.projectname.com/browse/PROJECTNAME-TTTT)
-  PATCH Add logic to runsheet teaser delete to delete corresponding
-  schedule cards.
- 
-## [1.2.3] - 2017-03-14
- 
-### Added
-   
-### Changed
- 
-### Fixed
- 
-- [PROJECTNAME-UUUU](http://tickets.projectname.com/browse/PROJECTNAME-UUUU)
-  MINOR Fix module foo tests
-- [PROJECTNAME-RRRR](http://tickets.projectname.com/browse/PROJECTNAME-RRRR)
-  MAJOR Module foo's timeline uses the browser timezone for date resolution 
+- N/A (initial release)

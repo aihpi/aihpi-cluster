@@ -1,66 +1,157 @@
 <div style="background-color: #ffffff; color: #000000; padding: 10px;">
-<img src="00_aisc\img\logo_aisc_bmftr.jpg">
-<h1> Your title.
+<img src="00_aisc/img/logo_aisc_bmftr.jpg">
+<h1>aihpi - AI High Performance Infrastructure
 </div>
 
-Your Project Description with a nice image
+A Python package for simplified distributed job submission on SLURM clusters with container support. Built on top of submitit with additional features specifically designed for AI/ML workloads.
 
 ## Features
 
-- **Key Feature 1**: A description of the Key features
-- **Key Feature 2**: A description of the Key features
+- **Simple API**: Configure and submit jobs with minimal code
+- **Distributed Training**: Automatic setup for multi-node distributed training
+- **Container Support**: First-class support for Pyxis/Enroot containers
+- **Remote Submission**: Submit jobs via SSH from remote machines
+- **LlamaFactory Integration**: Built-in support for LlamaFactory training
+- **Job Monitoring**: Real-time job status tracking and log streaming
+- **Experiment Tracking**: Integration with Weights & Biases, MLflow, and local tracking
+- **Flexible Configuration**: Dataclass-based configuration system
 
 ## Setup and Installation
 
 ### Prerequisites
 
-- Docker and Docker Compose
-- NVIDIA GPU with CUDA support (optional, but recommended for faster performance)
+- Python ≥ 3.8
+- submitit ≥ 1.4.0
+- Access to SLURM cluster with Pyxis/Enroot (for container jobs)
 
 ### Quick Start
 
 1. Clone the repository:
    ```bash
-   git clone ...
-   cd ...
+   git clone https://github.com/aihpi/aihpi-cluster.git
+   cd aihpi-cluster
    ```
 
-2. Run the setup or install dependencies:
+2. Install the package:
    ```bash
-   chmod +x setup.sh
-   ./setup.sh
+   # Basic installation
+   pip install -e .
+   
+   # With experiment tracking support
+   pip install -e ".[tracking]"
+   
+   # With all optional dependencies
+   pip install -e ".[all]"
    ```
 
-3. Access the application:
-   - Frontend: ...
-   - Backend API: ...
+3. Start using aihpi:
+   ```python
+   from aihpi import SlurmJobExecutor, JobConfig
+   
+   config = JobConfig(
+       job_name="my-training",
+       num_nodes=1,
+       gpus_per_node=2,
+       walltime="01:00:00",
+       partition="aisc"
+   )
+   
+   executor = SlurmJobExecutor(config)
+   job = executor.submit_function(my_training_function)
+   ```
 
 ## User Guide
 
 ### Using the Tool
-1. A brief description of using the tool.
-2. Be clear and simple.
+
+1. **Configure your job** using `JobConfig` with resource requirements and SLURM parameters
+2. **Create an executor** with `SlurmJobExecutor(config)`
+3. **Submit your function** with `executor.submit_function(func)` or `executor.submit_distributed_training(func)`
+4. **Monitor progress** using `JobMonitor` for real-time status updates
+5. **Track experiments** with Weights & Biases, MLflow, or local tracking
+
+### Basic Example
+
+```python
+from aihpi import SlurmJobExecutor, JobConfig, ContainerConfig
+
+# Configure multi-node distributed training
+config = JobConfig(
+    job_name="distributed-training",
+    num_nodes=4,
+    gpus_per_node=2,
+    walltime="04:00:00",
+    partition="aisc",
+)
+
+# Configure container
+config.container = ContainerConfig(
+    name="torch2412",
+    mounts=["/data:/workspace/data"]
+)
+
+executor = SlurmJobExecutor(config)
+
+def distributed_training():
+    import os
+    print(f"Node rank: {os.getenv('NODE_RANK')}")
+    print(f"World size: {os.getenv('WORLD_SIZE')}")
+    # Your distributed training code here
+
+job = executor.submit_distributed_training(distributed_training)
+```
+
+### Advanced Features
+
+- **Job Monitoring**: Real-time status tracking and log streaming
+- **Experiment Tracking**: Automatic logging of metrics, parameters, and artifacts
+- **Remote Submission**: Submit jobs via SSH from any machine
+- **LlamaFactory Integration**: Built-in support for LLM fine-tuning
+
+See `aihpi/examples/` for comprehensive usage examples.
 
 ### Recommendations
-Any additional hints for using the tool.
 
+- Use containerized jobs for reproducible environments
+- Enable experiment tracking for better ML workflow management  
+- Monitor long-running jobs with the built-in monitoring utilities
+- Configure SSH keys for seamless remote job submission
+
+## Package Structure
+
+```
+aihpi/
+├── core/                 # Core job submission functionality
+│   ├── config.py        # Configuration classes
+│   └── executor.py      # Job executors
+├── monitoring/          # Job monitoring utilities
+│   └── monitoring.py    # Real-time job status and log streaming
+├── tracking/           # Experiment tracking integrations
+│   └── tracking.py     # W&B, MLflow, and local tracking
+└── examples/           # Usage examples
+    ├── basic.py        # Basic job submission examples
+    └── monitoring.py   # Monitoring and tracking examples
+```
 
 ## Limitations
 
-- **Limitation 1**: List of Limitations
-- **Limitation 2**: List of Limitations
-
+- **SLURM Dependency**: Requires access to a SLURM cluster environment
+- **Container Runtime**: Container features require Pyxis/Enroot setup
+- **Network Access**: Remote submission requires SSH connectivity to login nodes
 
 ## References
 
-- [Reference 1](https://hpi.de/kisz)
-- [Reference 2](https://hpi.de/kisz)
+- [submitit Documentation](https://github.com/facebookincubator/submitit)
+- [SLURM Workload Manager](https://slurm.schedmd.com/)
+- [Weights & Biases](https://wandb.ai/)
+- [MLflow](https://mlflow.org/)
 
 ## Author
-- [Your Name](https://hpi.de/kisz)
+- [Felix Boelter](https://hpi.de/kisz)
 
 ## License
 
+MIT License - see LICENSE file for details.
 
 ---
 
