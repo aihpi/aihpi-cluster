@@ -53,7 +53,8 @@ A Python package for simplified distributed job submission on SLURM clusters wit
        num_nodes=1,
        gpus_per_node=2,
        walltime="01:00:00",
-       partition="aisc"
+       partition="aisc",
+       login_node="10.130.0.6"  # Your SLURM login node IP
    )
    
    executor = SlurmJobExecutor(config)
@@ -65,6 +66,7 @@ A Python package for simplified distributed job submission on SLURM clusters wit
 ### Using the Tool
 
 1. **Configure your job** using `JobConfig` with resource requirements and SLURM parameters
+   - **Important**: Set `login_node` to your SLURM login node IP for remote job submission
 2. **Create an executor** with `SlurmJobExecutor(config)`
 3. **Submit your function** with `executor.submit_function(func)` or `executor.submit_distributed_training(func)`
 4. **Monitor progress** using `JobMonitor` for real-time status updates
@@ -82,6 +84,7 @@ config = JobConfig(
     gpus_per_node=2,
     walltime="04:00:00",
     partition="aisc",
+    login_node="10.130.0.6",  # Your SLURM login node IP
 )
 
 # Configure container

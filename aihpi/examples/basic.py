@@ -12,6 +12,7 @@ def example_single_node():
         gpus_per_node=2,
         walltime="00:30:00",
         partition="aisc",
+        login_node="10.130.0.6",
     )
     
     executor = SlurmJobExecutor(config)
@@ -29,17 +30,17 @@ def example_multi_node():
     """Example: Multi-node distributed training."""
     config = JobConfig(
         job_name="multi-node-example", 
-        num_nodes=4,
+        num_nodes=2,
         gpus_per_node=2,
         walltime="02:00:00",
         partition="aisc",
         shared_storage_root=Path("/sc/home/your_username"),
+        login_node="10.130.0.6",
     )
     
     # Configure container
     config.container = ContainerConfig(
-        name="torch2412",
-        mounts=["/workspace/data:/data"]
+        name="torch2412"
     )
     
     executor = SlurmJobExecutor(config)
@@ -66,6 +67,7 @@ def example_llamafactory():
         partition="aisc",
         workspace_mount=Path("/sc/home/your_username/LLaMA-Factory"),
         setup_commands=["source /workspace/vnv/bin/activate"],
+        login_node="10.130.0.6",
     )
     
     # Add workspace mount to container
@@ -107,6 +109,7 @@ def example_custom_environment():
         gpus_per_node=1,
         walltime="00:45:00",
         partition="aisc",
+        login_node="10.130.0.6",
         env_vars={
             "CUSTOM_VAR": "custom_value",
             "MODEL_NAME": "llama-3-8b",
@@ -136,7 +139,9 @@ if __name__ == "__main__":
     print("aihpi examples")
     print("==============")
     print("1. Single-node job")
+    example_single_node()
     print("2. Multi-node distributed training") 
+    example_multi_node()
     print("3. LlamaFactory training")
     print("4. Remote submission via SSH")
     print("5. Custom environment variables")

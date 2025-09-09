@@ -192,3 +192,23 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# AIHPI specific files
+# Job logs and SLURM output files
+logs/
+*.out
+*.err
+
+# CLAUDE.md is auto-generated for Claude Code assistance
+CLAUDE.md
+
+# Experiment tracking directories
+experiments/
+mlruns/
+wandb/
+
+# Local test artifacts
+test_logs/
+
+# Temporary job files
+temp_*/

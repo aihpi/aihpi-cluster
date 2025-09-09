@@ -7,6 +7,7 @@ from typing import Dict, List, Optional, Union, Iterator
 from dataclasses import dataclass
 from datetime import datetime
 import submitit
+from submitit.core.utils import JobPaths
 from pathlib import Path
 
 
@@ -181,7 +182,7 @@ class JobMonitor:
             print(f"Failed to cancel job {job_id}: {e}")
             return False
     
-    def stream_logs(self, job_paths: submitit.JobPaths, 
+    def stream_logs(self, job_paths: JobPaths, 
                     follow: bool = True,
                     lines: int = 50) -> Iterator[str]:
         """Stream job logs in real-time."""
