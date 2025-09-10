@@ -8,6 +8,7 @@ A Python package for simplified distributed job submission on SLURM clusters wit
 ## Features
 
 - **Simple API**: Configure and submit jobs with minimal code
+- **Command Line Interface**: `aihpi` CLI for easy job submission and management
 - **Distributed Training**: Automatic setup for multi-node distributed training
 - **Container Support**: First-class support for Pyxis/Enroot containers
 - **Remote Submission**: Submit jobs via SSH from remote machines
@@ -24,7 +25,8 @@ A Python package for simplified distributed job submission on SLURM clusters wit
 - submitit ≥ 1.4.0
 - Access to SLURM cluster with Pyxis/Enroot (for container jobs)
 
-### Quick Start
+<details>
+<summary><strong>Installation with pip</strong></summary>
 
 1. Clone the repository:
    ```bash
@@ -43,8 +45,42 @@ A Python package for simplified distributed job submission on SLURM clusters wit
    # With all optional dependencies
    pip install -e ".[all]"
    ```
+</details>
 
-3. Start using aihpi:
+<details>
+<summary><strong>Installation with UV (Recommended)</strong></summary>
+
+[UV](https://docs.astral.sh/uv/) is a fast Python package manager that provides better dependency resolution and faster installs:
+
+1. Install UV (if not already installed):
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   # or
+   pip install uv
+   ```
+
+2. Clone and setup:
+   ```bash
+   git clone https://github.com/aihpi/aihpi-cluster.git
+   cd aihpi-cluster
+   ```
+
+3. Install with UV:
+   ```bash
+   # Basic installation
+   uv pip install -e .
+   
+   # With experiment tracking support
+   uv pip install -e ".[tracking]"
+   
+   # With all optional dependencies (recommended)
+   uv pip install -e ".[all]"
+   ```
+</details>
+
+### Quick Start
+
+After installation, start using aihpi:
    ```python
    from aihpi import SlurmJobExecutor, JobConfig
    
@@ -104,6 +140,58 @@ def distributed_training():
 job = executor.submit_distributed_training(distributed_training)
 ```
 
+### Command Line Interface
+
+The `aihpi` CLI provides a convenient command-line interface for job submission and management:
+
+```bash
+# Submit a single-node Python job
+aihpi run train.py --config slurm_config.py
+
+# Submit with monitoring
+aihpi run train.py --config slurm_config.py --monitor
+
+# Submit distributed job (automatically detected from config)
+aihpi run train.py --config distributed_config.py
+
+# Submit LlamaFactory job with app config
+aihpi run llamafactory-cli train --config job_config.py --app-config train.yaml
+
+# Monitor a running job
+aihpi monitor 12345 --follow
+
+# Check job status
+aihpi status
+
+# Cancel a job
+aihpi cancel 12345
+```
+
+#### CLI Configuration Files
+
+The CLI uses Python configuration files containing a `JobConfig` object:
+
+```python
+# config.py
+from aihpi import JobConfig
+from pathlib import Path
+
+config = JobConfig(
+    job_name="my_job",
+    num_nodes=1,
+    gpus_per_node=2,
+    walltime="02:00:00",
+    partition="gpu",
+    log_dir=Path("./logs"),
+    login_node="10.130.0.6"
+)
+```
+
+The CLI automatically determines the submission mode:
+- **Function mode**: Single-node Python scripts
+- **Distributed mode**: Multi-node Python scripts (when `num_nodes > 1`) 
+- **CLI mode**: Non-Python executables
+
 ### Advanced Features
 
 - **Job Monitoring**: Real-time status tracking and log streaming
@@ -124,16 +212,17 @@ See `aihpi/examples/` for comprehensive usage examples.
 
 ```
 aihpi/
-├── core/                 # Core job submission functionality
-│   ├── config.py        # Configuration classes
-│   └── executor.py      # Job executors
-├── monitoring/          # Job monitoring utilities
-│   └── monitoring.py    # Real-time job status and log streaming
-├── tracking/           # Experiment tracking integrations
-│   └── tracking.py     # W&B, MLflow, and local tracking
-└── examples/           # Usage examples
-    ├── basic.py        # Basic job submission examples
-    └── monitoring.py   # Monitoring and tracking examples
+├── cli.py              # Command-line interface
+├── core/               # Core job submission functionality
+│   ├── config.py      # Configuration classes
+│   └── executor.py    # Job executors
+├── monitoring/        # Job monitoring utilities
+│   └── monitoring.py  # Real-time job status and log streaming
+├── tracking/          # Experiment tracking integrations
+│   └── tracking.py    # W&B, MLflow, and local tracking
+└── examples/          # Usage examples
+    ├── basic.py       # Basic job submission examples
+    └── monitoring.py  # Monitoring and tracking examples
 ```
 
 ## Limitations

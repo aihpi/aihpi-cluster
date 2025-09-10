@@ -75,8 +75,40 @@ def example_llamafactory():
     
     executor = SlurmJobExecutor(config)
     
-    # Submit LlamaFactory training
-    job = executor.submit_llamafactory_training("examples/train_lora/llama3_lora_sft.yaml")
+    # Submit LlamaFactory training using CLI
+    job = executor.submit_cli_training(
+        command=["llamafactory-cli", "train"],
+        config_path="examples/train_lora/llama3_lora_sft.yaml"
+    )
+    return job
+
+
+def example_llamafactory_uv():
+    """Example: LlamaFactory training job with UV."""
+    config = JobConfig(
+        job_name="llama-training-uv",
+        num_nodes=2, 
+        gpus_per_node=1,
+        walltime="04:00:00",
+        partition="aisc",
+        workspace_mount=Path("/sc/home/your_username/LLaMA-Factory"),
+        setup_commands=[
+            "cd /workspace",
+            "uv sync --extra torch --extra metrics --prerelease=allow"
+        ],
+        login_node="10.130.0.6",
+    )
+    
+    # Add workspace mount to container
+    config.container.mounts.append(f"{config.workspace_mount}:/workspace")
+    
+    executor = SlurmJobExecutor(config)
+    
+    # Submit LlamaFactory training using UV
+    job = executor.submit_cli_training(
+        command=["uv", "run", "--prerelease=allow", "llamafactory-cli", "train"],
+        config_path="examples/train_lora/llama3_lora_pretrain.yaml"
+    )
     return job
 
 

@@ -15,6 +15,30 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - Nothing yet.
 
+## [0.1.2] - 2025-09-10
+
+### Added
+- **CLI Interface**: New `aihpi` command-line tool for job submission and management
+  - `aihpi run` - Submit jobs with automatic mode detection (function/distributed/CLI)
+  - `aihpi monitor` - Monitor job status with real-time updates
+  - `aihpi status` - List all user jobs
+  - `aihpi cancel` - Cancel running jobs
+  - `aihpi logs` - View job logs (placeholder for future implementation)
+- **Automatic Submission Mode Detection**: CLI automatically chooses appropriate submission method based on configuration and command type
+- **Colored Terminal Output**: Enhanced user experience with colored status messages and job information
+- **Config Validation**: Comprehensive validation for JobConfig parameters with detailed error messages
+- **Installation Guides**: Added collapsible dropdown installation instructions for both pip and UV package managers
+- **Test Framework**: Added pytest configuration and test structure in `tests/` directory
+- **Package Configuration**: Added comprehensive `pyproject.toml` with build system, dependencies, and development tools
+- **Example Configurations**: Added example config files in `aihpi/examples/configs/` directory
+- **Training Examples**: Added `train_example.py` with practical training job examples
+- **UV Lock File**: Added `uv.lock` for reproducible dependency management
+
+### Changed
+- **Refactored Examples**: Updated executor examples to use `submit_cli_training` consistently
+- **Enhanced README**: Added comprehensive CLI usage examples and configuration documentation
+- **Installation Documentation**: Restructured installation section with dropdown sections for pip and UV
+
 ## [0.1.1] - 2025-09-09
 
 Bug fixes and improvements for stable job submission and log organization.

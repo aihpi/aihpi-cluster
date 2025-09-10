@@ -270,11 +270,3 @@ class SlurmJobExecutor:
         
         return self.submit_distributed_training(cli_train, config_path)
     
-    def submit_llamafactory_training(self, config_path: str) -> submitit.Job:
-        """
-        Submit a LlamaFactory training job.
-        
-        Args:
-            config_path: Path to LlamaFactory configuration YAML file
-        """
-        return self.submit_cli_training(["llamafactory-cli", "train"], config_path)
